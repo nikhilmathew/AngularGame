@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-userdetail',
@@ -6,11 +6,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./userdetail.component.css']
 })
 export class UserdetailComponent implements OnInit {
-user= ""
+@Output() passUsername = new EventEmitter<string>();
+user :string="";
   constructor() { }
 
   ngOnInit() {
     this.user="nikhil"
   }
 
+onSelected(){
+  this.passUsername.emit();
+}
 }

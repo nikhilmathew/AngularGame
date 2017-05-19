@@ -1,7 +1,8 @@
 <div class="row" style="margin-top:100px">
   <div class="col-xs-8 col-xs-offset-2">
     <p> game buttons here</p>
-    <app-userdetail *ngIf="user ==='nikhil'"></app-userdetail>
+    <p> {{ user }}</p>
+    <app-userdetail (passUsername)="catchUsername($event)" ></app-userdetail>
     <button class="btn btn-primary" (click)="startFreeMatchCall()" >Play Free Match</button>
   </div>
 </div>

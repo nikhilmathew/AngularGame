@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router } from "@angular/router";
 
 @Component({
@@ -7,7 +7,7 @@ import { Router } from "@angular/router";
   styleUrls: ['./homepage.component.css']
 })
 export class HomepageComponent implements OnInit {
-   user :string="nikhil"
+ @Input() user
 
   constructor(private router: Router) { }
 
@@ -16,6 +16,10 @@ export class HomepageComponent implements OnInit {
 
 startFreeMatchCall(){
   console.log("has to call new component to replace homepage ");
+  if(this.user!="")
   this.router.navigate(['/game'])
+}
+catchUsername(user){
+  this.user=user;
 }
 }
