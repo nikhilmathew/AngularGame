@@ -1,3 +1,4 @@
+
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -13,6 +14,9 @@ import { MaterialModule } from '@angular/material'
 import { ToasterService } from './services/toaster.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import 'hammerjs';
+import { QuizComponent } from './game/quiz/quiz.component';
+import { SFService } from './services/sfs.service'
+import { DataService } from './services/data.service';
 const appRoutes : Routes = [
   { path:'game', component:GameComponent},
   { path:'', component: HomepageComponent}
@@ -24,7 +28,8 @@ const appRoutes : Routes = [
     HeaderComponent,
     HomepageComponent,
     GameComponent,
-    UserdetailComponent
+    UserdetailComponent,
+    QuizComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +39,7 @@ const appRoutes : Routes = [
     RouterModule.forRoot(appRoutes),
     BrowserAnimationsModule
   ],
-  providers: [ToasterService],
+  providers: [ToasterService,SFService,DataService],
   bootstrap: [AppComponent],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
