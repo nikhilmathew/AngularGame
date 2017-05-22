@@ -11,10 +11,10 @@ user :string="";
   constructor() { }
 
   ngOnInit() {
-    this.user="nikhil"
+    
   }
 
 onSelected(){
-  this.passUsername.emit();
+  this.passUsername.emit(this.user);
 }
 }

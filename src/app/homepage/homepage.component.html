@@ -2,7 +2,7 @@
   <div class="col-xs-8 col-xs-offset-2">
     <p> game buttons here</p>
     <p> {{ user }}</p>
-    <app-userdetail (passUsername)="catchUsername($event)" ></app-userdetail>
+    <app-userdetail *ngIf="showUserField" (passUsername)="catchUsername($event)" ></app-userdetail>
     <button class="btn btn-primary" (click)="startFreeMatchCall()" >Play Free Match</button>
   </div>
 </div>

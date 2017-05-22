@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { Routes, RouterModule } from '@angular/router';
@@ -9,7 +9,10 @@ import { HeaderComponent } from './header/header.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { GameComponent } from './game/game.component';
 import { UserdetailComponent } from './homepage/userdetail/userdetail.component';
-
+import { MaterialModule } from '@angular/material'
+import { ToasterService } from './services/toaster.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import 'hammerjs';
 const appRoutes : Routes = [
   { path:'game', component:GameComponent},
   { path:'', component: HomepageComponent}
@@ -27,9 +30,14 @@ const appRoutes : Routes = [
     BrowserModule,
     FormsModule,
     HttpModule,
-    RouterModule.forRoot(appRoutes)
+    MaterialModule,
+    RouterModule.forRoot(appRoutes),
+    BrowserAnimationsModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [ToasterService],
+  bootstrap: [AppComponent],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
+  ]
 })
 export class AppModule { }
