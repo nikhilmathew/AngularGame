@@ -9,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
   providers: [DataService]
 })
 export class GameComponent implements OnInit {
-  quizdata: { quiz:string, options:string } 
+  quizdata: any 
   constructor(private router: Router,private ds: DataService) { }
 
   ngOnInit() {
@@ -24,7 +24,8 @@ export class GameComponent implements OnInit {
   }
 
   fetchQuizDetails() {
-    //this.quizdata =this.ds.getQuizData();
+    this.quizdata = this.ds.getQuizData()
+    console.log(this.quizdata)
 
   }
 }

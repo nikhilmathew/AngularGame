@@ -1,6 +1,5 @@
-import { DataService } from './../../services/data.service';
 import { SFService } from './../../services/sfs.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-quiz',
@@ -8,19 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./quiz.component.css']
 })
 export class QuizComponent implements OnInit {
-question :any;
-  constructor(private sfx :SFService,private ds: DataService) { }
+  @Input() question: any;
+  constructor(private sfx: SFService) { }
 
   ngOnInit() {
-    //console.log(this.sfx.testSFX())
-    //  this.question = this.ds.getQuizData()
-    //  console.log(this.question)
-    this.ds.getQuizData()
-    .subscribe(
-      (questions:any) =>{
-        console.log(questions)
-      }
-    )
-}
+    this.sfx.testSFX()
+  }
 
 }

@@ -19,7 +19,7 @@ import { SFService } from './services/sfs.service'
 import { DataService } from './services/data.service';
 const appRoutes : Routes = [
   { path:'game', component:GameComponent},
-  { path:'', component: HomepageComponent}
+  { path:'', component: GameComponent}
 ]
 
 @NgModule({
