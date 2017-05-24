@@ -14,4 +14,7 @@ export class QuizComponent implements OnInit {
     this.sfx.testSFX()
   }
 
+testSFSWorking(){
+  this.sfx.testSFXWorking()
+}
 }

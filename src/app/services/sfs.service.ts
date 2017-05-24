@@ -1,24 +1,27 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import  { Observable } from 'rxjs/Observable'
 import  'rxjs'
-declare var SFS2X: any;
-import '../../assets/SFS2X_API_JS.js'
+declare var SmartFox : any
+import '../../assets/sfs2x-api-1.7.3.js'
 @Injectable()
 export class SFService {
     sfs:any;
     testSFX() {
-        // this.sfs = new SFS2X.SmartFox();
-        // console.log(this.sfs,SFS2X.SocketEngine.isConnecting)
-        // this.sfs.addEventListener(SFS2X.SFSEvent.CONNECTION, onConnection , this.sfs);
-        // //console.log(SFS2X.isConnected())
-        // this.sfs.connect('stg-sf.sportsunity.co', 9933).emit()
-        // function onConnection(evtParams) {
-        //     if (evtParams.success)
-        //         console.log("Connected to SmartFoxServer 2X!");
-        //     else
-        //         console.log("Connection failed. Is the server running at all?");
-        // }
+        this.sfs = new SmartFox();
+        console.log(this.sfs,this.sfs.isConnected())
+       // this.sfs.addEventListener(SFS2X.SFSEvent.CONNECTION, onConnection , this.sfs);
+        //console.log(SFS2X.isConnected())
+        this.sfs.connect('localhost', 8080)
+        function onConnection(evtParams) {
+            if (evtParams.success)
+                console.log("Connected to SmartFoxServer 2X!");
+            else
+                console.log("Connection failed. Is the server running at all?");
+        }
 
+    }
+    testSFXWorking(){
+        console.log(this.sfs.isConnected());
     }
     loginSFS() {
         // this.sfs.addEventListener(SFS2X.SFSEvent.LOGIN, onLogin, this);
