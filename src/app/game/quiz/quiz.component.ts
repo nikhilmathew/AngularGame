@@ -8,13 +8,17 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class QuizComponent implements OnInit {
   @Input() question: any;
+  username: string;
   constructor(private sfx: SFService) { }
 
   ngOnInit() {
     this.sfx.testSFX()
   }
 
-testSFSWorking(){
-  this.sfx.testSFXWorking()
-}
+  testSFSWorking() {
+    this.sfx.testSFXWorking()
+  }
+  loginSFS() {
+    this.sfx.loginSFS(this.username);
+  }
 }

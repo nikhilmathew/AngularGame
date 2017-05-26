@@ -9,23 +9,26 @@ import { Component, OnInit } from '@angular/core';
   providers: [DataService]
 })
 export class GameComponent implements OnInit {
-  quizdata: any 
-  constructor(private router: Router,private ds: DataService) { }
+  quizdata: any
+  constructor(private router: Router, private ds: DataService) { }
 
   ngOnInit() {
     console.log('hello u just entered game component"')
-    setTimeout(() => {
-      this.fetchQuizDetails()
-      //console.log(this.quizdata.quiz,this.quizdata.options)
-    }, 3000);
+
+    this.fetchQuizDetails()
+    //console.log(this.quizdata.quiz,this.quizdata.options)
   }
   returnHome() {
     this.router.navigate(['/'])
   }
 
   fetchQuizDetails() {
-    this.quizdata = this.ds.getQuizData()
-    console.log(this.quizdata)
+    this.quizdata = this.ds.getQuizData().subscribe(
+      data =>{
+        this.quizdata = data
+        console.log(this.quizdata)
+      }
+    )
 
   }
 }
