@@ -91,9 +91,15 @@ export class SFService {
             // SFSController.getSFSClient().send(new ExtensionRequest("g", object));
             // }
 
-            var object:any = {}
-            object.rg= "g1";
-            object.rn= "random";
+            function randomString(length, chars) {
+                var result = '';
+                for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+                return result;
+            }
+            var rString = randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+            var object: any = {}
+            object.rg = "g1";
+            object.rn = randomString(10, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 
 
             this.sfs.send(new SFS2X.Requests.System.ExtensionRequest("g", object));
