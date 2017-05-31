@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter ,OnInit } from '@angular/core';
+import { Injectable, EventEmitter, OnInit } from '@angular/core';
 
 declare var window: any;
 declare var SFS2X: any;
@@ -6,11 +6,14 @@ declare var SFS2X: any;
 @Injectable()
 export class SFService {
     sfs: any;
-    ngOnInit(){
+    ngOnInit() {
 
     }
-    testSFX() {
-        
+    initializeEventListeners() {
+
+    }
+    initiateSFX() {
+
         //
         let config: any = {};
         config.host = '192.168.0.11';// "stg-sf.sportsunity.co";
@@ -21,11 +24,11 @@ export class SFService {
         //
         this.sfs = new SFS2X.SmartFox(config);
         //
-        console.log(this,window) 
+        console.log(this, window)
         this.sfs.addEventListener(SFS2X.SFSEvent.CONNECTION, onConnection, window);
         this.sfs.addEventListener(SFS2X.SFSEvent.CONNECTION_LOST, onConnectionLost, this);
-        
-        function onConnection(evtParams,self=this) {
+
+        function onConnection(evtParams, self = this) {
             if (evtParams.success)
                 console.log("Connected to SmartFoxServer 2X!");
             else
@@ -49,25 +52,63 @@ export class SFService {
             }
         }
         this.sfs.connect()
-        
+
     }
     testSFXWorking() {
         console.log(this.sfs.isConnected());
     }
-    loginSFS(username:string) {
+    loginSFS(username: string) {
         this.sfs.addEventListener(SFS2X.SFSEvent.LOGIN, onLogin, this);
         this.sfs.addEventListener(SFS2X.SFSEvent.LOGIN_ERROR, onLoginError, this);
+        this.sfs.addEventListener(SFS2X.SFSEvent.EXTENSION_RESPONSE, onExtensionResponse, this);
 
         // Login
         this.sfs.send(new SFS2X.Requests.System.LoginRequest(username, "", null, "SportsUnity"));
 
 
         function onLogin(evtParams) {
+            var params: any = {};
+            params.n1 = 26;
+            params.n2 = 16;
             console.log("Login successful!");
+
+
+            // public void randomOpponent(String jid, String level) {
+            // GameKeyGenerator.getInstance().generateRoomKey();
+            // String roomName = GameKeyGenerator.getInstance().getRoomKey(jid);
+            // ISFSObject object = new SFSObject();
+            // object.putUtfString(GameConstant.PARAM_NAME_ROOM_GROUP, ROOM_GROUP_ID+level);
+            // object.putUtfString(GameConstant.PARAM_ROOM_NAME, roomName);
+            // SFSController.getSFSClient().send(new ExtensionRequest(GameConstant.GAME_REQUEST_ID, object));
+            // }
+
+            // public void randomOpponent(String jid, String level) {
+            // GameKeyGenerator.getInstance().generateRoomKey();
+            // String roomName = GameKeyGenerator.getInstance().getRoomKey(jid);
+            // ISFSObject object = new SFSObject();
+            // object.putUtfString("rg", "g1");
+            // object.putUtfString("rn", roomName);
+            // SFSController.getSFSClient().send(new ExtensionRequest("g", object));
+            // }
+
+            var object:any = {}
+            object.rg= "g1";
+            object.rn= "random";
+
+
+            this.sfs.send(new SFS2X.Requests.System.ExtensionRequest("g", object));
         }
 
         function onLoginError(evtParams) {
             console.log("Login failure: " + evtParams.errorMessage);
+        }
+        function onExtensionResponse(evtParams) {
+            if (evtParams.cmd == "add") {
+                var responseParams = evtParams.params;
+
+                // We expect a number called "sum"
+                console.log("The sum is: " + responseParams.sum);
+            }
         }
     }
 }

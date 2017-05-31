@@ -12,7 +12,7 @@ export class QuizComponent implements OnInit {
   constructor(private sfx: SFService) { }
 
   ngOnInit() {
-    this.sfx.testSFX()
+    this.sfx.initiateSFX()
   }
 
   testSFSWorking() {
