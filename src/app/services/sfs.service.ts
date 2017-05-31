@@ -24,11 +24,11 @@ export class SFService {
         //
         this.sfs = new SFS2X.SmartFox(config);
         //
-        console.log(this, window)
+        //console.log(this, window)
         this.sfs.addEventListener(SFS2X.SFSEvent.CONNECTION, onConnection, window);
-        this.sfs.addEventListener(SFS2X.SFSEvent.CONNECTION_LOST, onConnectionLost, this);
+        this.sfs.addEventListener(SFS2X.SFSEvent.CONNECTION_LOST, onConnectionLost,window);
 
-        function onConnection(evtParams, self = this) {
+        function onConnection(evtParams) {
             if (evtParams.success)
                 console.log("Connected to SmartFoxServer 2X!");
             else
@@ -57,10 +57,10 @@ export class SFService {
     testSFXWorking() {
         console.log(this.sfs.isConnected());
     }
-    loginSFS(username: string) {
-        this.sfs.addEventListener(SFS2X.SFSEvent.LOGIN, onLogin, this);
-        this.sfs.addEventListener(SFS2X.SFSEvent.LOGIN_ERROR, onLoginError, this);
-        this.sfs.addEventListener(SFS2X.SFSEvent.EXTENSION_RESPONSE, onExtensionResponse, this);
+    loginSFS(username: string, self=this) {
+        this.sfs.addEventListener(SFS2X.SFSEvent.LOGIN, onLogin, window);
+        this.sfs.addEventListener(SFS2X.SFSEvent.LOGIN_ERROR, onLoginError, window);
+        this.sfs.addEventListener(SFS2X.SFSEvent.EXTENSION_RESPONSE, onExtensionResponse, window);
 
         // Login
         this.sfs.send(new SFS2X.Requests.System.LoginRequest(username, "", null, "SportsUnity"));
@@ -101,20 +101,15 @@ export class SFService {
             object.rg = "g1";
             object.rn = randomString(10, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 
-
-            this.sfs.send(new SFS2X.Requests.System.ExtensionRequest("g", object));
+            
+            self.sfs.send(new SFS2X.Requests.System.ExtensionRequest("g", object));
         }
 
         function onLoginError(evtParams) {
             console.log("Login failure: " + evtParams.errorMessage);
         }
         function onExtensionResponse(evtParams) {
-            if (evtParams.cmd == "add") {
-                var responseParams = evtParams.params;
-
-                // We expect a number called "sum"
-                console.log("The sum is: " + responseParams.sum);
-            }
+                console.log(evtParams);
         }
     }
 }
