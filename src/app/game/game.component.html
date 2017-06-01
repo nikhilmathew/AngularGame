@@ -1,11 +1,13 @@
-<button class="btn btn-danger" (click)="returnHome()" >Return to Homepage</button>
+<button class="btn btn-danger" (click)="returnHome()">Return to Homepage</button>
 <p>
   game works! {{ticks}} timer 2 {{timer2}}
 </p>
 <button class="btn btn-primary" (click)="testSFSWorking()">Test SFS</button>
 <input type="text" [(ngModel)]="username" />
 <button class="btn btn-primary" (click)="loginSFS()">Login to Smart Fox  as {{ username }}</button>
- <app-quiz *ngIf="datafetched" [questions] = "quizdata.questions" >
-   running
- </app-quiz>
- 
+<app-commentary *ngIf="commentary" else quizcomp></app-commentary>
+<ng-template #quizcomp> alternate text for commentary</ng-template>
+
+<app-quiz *ngIf="datafetched" [questions]="quizdata.questions">
+  running
+</app-quiz>

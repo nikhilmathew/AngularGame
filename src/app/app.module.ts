@@ -17,6 +17,7 @@ import 'hammerjs';
 import { QuizComponent } from './game/quiz/quiz.component';
 import { SFService } from './services/sfs.service'
 import { DataService } from './services/data.service';
+import { CommentaryComponent } from './game/commentary/commentary.component';
 const appRoutes : Routes = [
   { path:'game', component:GameComponent},
   { path:'', component: HomepageComponent}
@@ -29,7 +30,8 @@ const appRoutes : Routes = [
     HomepageComponent,
     GameComponent,
     UserdetailComponent,
-    QuizComponent
+    QuizComponent,
+    CommentaryComponent
   ],
   imports: [
     BrowserModule,

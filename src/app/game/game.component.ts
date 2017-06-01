@@ -12,23 +12,34 @@ import { Observable } from "rxjs/Observable";
 })
 export class GameComponent implements OnInit {
   @Output() quizdata: any
-  username: string="nik";
-  maxticks = 60
+  username: string = "nik";
+  maxticks = 10
   ticks = 0
-  timer2 = 60000
-  datafetched =false;
+  timer2 = 600
+  datafetched = false;
+  commentary: boolean = true;
   constructor(private router: Router, private ds: DataService, private sfx: SFService) { }
 
   ngOnInit() {
     this.sfx.initiateSFX()
     console.log('hello u just entered game component"')
     let timer = Observable.timer(1, 1000);
-    timer.subscribe(t => this.ticks = this.maxticks - t);
+    timer.subscribe(
+      (t) => {
+        if (this.ticks != 0) {
+          this.ticks = this.maxticks - t
+        }
+      }
+    );
     this.fetchQuizDetails()
     setInterval(() => {
-      this.timer2 -= 1
+      if (this.timer2 != 0) {
+        this.timer2 -= 1
+      }
     }, 1)
-
+    setTimeout(() => {
+      this.commentary = false
+    }, 2000)
     //console.log(this.quizdata.quiz,this.quizdata.options)
   }
   returnHome() {
@@ -40,7 +51,7 @@ export class GameComponent implements OnInit {
       data => {
         this.quizdata = data
         console.log(this.quizdata.questions)
-        this.datafetched=true
+        this.datafetched = true
       }
     )
 
