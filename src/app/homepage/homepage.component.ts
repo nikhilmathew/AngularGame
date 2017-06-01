@@ -20,16 +20,16 @@ showUserField :boolean = false;
 startFreeMatchCall(){
   console.log("has to call new component to replace homepage ");
   if(this.user!=""){
-    this.router.navigate(['/game'])
-   
-  }else{
-     this.toasterService.showToaster('Username has Not been entered, Please enter a username',10000);
+    this.router.navigate(['game']) 
+  }
+  else{
+     this.toasterService.showToaster('Please enter a username',10000);
      this.showUserField=true
   }
 
 }
 catchUsername(user){
   this.user=user;
-  console.log(user);
+  //console.log(user);
 }
 }
