@@ -19,7 +19,7 @@ import { SFService } from './services/sfs.service'
 import { DataService } from './services/data.service';
 import { CommentaryComponent } from './game/commentary/commentary.component';
 const appRoutes : Routes = [
-  { path:'game', component:GameComponent},
+  { path:'game/:username', component:GameComponent},
   { path:'', component: HomepageComponent}
 ]
 

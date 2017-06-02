@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter, OnInit } from '@angular/core';
+import { Injectable, EventEmitter} from '@angular/core';
 
 declare var window: any;
 declare var SFS2X: any;
@@ -6,25 +6,8 @@ declare var SFS2X: any;
 @Injectable()
 export class SFService {
     sfs: any;
-    ngOnInit() {
-
-    }
-    initializeEventListeners() {
-
-    }
-    initiateSFX() {
-
-        //
-        let config: any = {};
-        config.host = '192.168.0.11';// "stg-sf.sportsunity.co";
-        config.port = 8888;
-        config.useSSL = false;
-        config.zone = "SportsUnity"//"BasicExamples";
-        config.debug = true;
-        //
-        this.sfs = new SFS2X.SmartFox(config);
-        //
-        //console.log(this, window)
+   
+    initializeEventListeners() { // try to add all event listeners here
         this.sfs.addEventListener(SFS2X.SFSEvent.CONNECTION, onConnection, window);
         this.sfs.addEventListener(SFS2X.SFSEvent.CONNECTION_LOST, onConnectionLost,window);
 
@@ -51,6 +34,22 @@ export class SFService {
                 // Manual disconnection is usually ignored
             }
         }
+    }
+    initiateSFX() {
+
+        //
+        let config: any = {};
+        config.host = '192.168.0.11';// "stg-sf.sportsunity.co";
+        config.port = 8888;
+        config.useSSL = false;
+        config.zone = "SportsUnity"//"BasicExamples";
+        config.debug = false;
+        //
+        this.sfs = new SFS2X.SmartFox(config);
+        //
+        this.initializeEventListeners();
+        //console.log(this, window)
+        
         this.sfs.connect()
 
     }
@@ -58,9 +57,7 @@ export class SFService {
         console.log(this.sfs.isConnected());
     }
     loginSFS(username: string, self=this) {
-        this.sfs.addEventListener(SFS2X.SFSEvent.LOGIN, onLogin, window);
-        this.sfs.addEventListener(SFS2X.SFSEvent.LOGIN_ERROR, onLoginError, window);
-        this.sfs.addEventListener(SFS2X.SFSEvent.EXTENSION_RESPONSE, onExtensionResponse, window);
+        
 
         // Login
         this.sfs.send(new SFS2X.Requests.System.LoginRequest(username, "", null, "SportsUnity"));
