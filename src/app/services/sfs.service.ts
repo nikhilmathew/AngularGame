@@ -6,7 +6,8 @@ declare var SFS2X: any;
 @Injectable()
 export class SFService {
     sfs: any;
-
+    roomId:string;
+    
     initializeEventListeners() { // try to add all event listeners here
         this.sfs.addEventListener(SFS2X.SFSEvent.CONNECTION, onConnection, window);
         this.sfs.addEventListener(SFS2X.SFSEvent.CONNECTION_LOST, onConnectionLost, window);
@@ -15,8 +16,12 @@ export class SFService {
         this.sfs.addEventListener(SFS2X.SFSEvent.EXTENSION_RESPONSE, onExtensionResponse, this);
         this.sfs.addEventListener(SFS2X.SFSEvent.ROOM_ADD, onRoomCreated, this);
         this.sfs.addEventListener(SFS2X.SFSEvent.ROOM_CREATION_ERROR, onRoomCreationError, this);
-        this.sfs.addEventListener(SFS2X.SFSEvent.ROOM_JOIN, onRoomJoined, this);
+        this.sfs.addEventListener(SFS2X.SFSEvent.ROOM_JOIN, this.onRoomJoined, this);
         this.sfs.addEventListener(SFS2X.SFSEvent.ROOM_JOIN_ERROR, onRoomJoinError, this);
+        this.sfs.addEventListener(SFS2X.SFSEvent.USER_COUNT_CHANGE, this.sendReady, this);
+        this.sfs.addEventListener(SFS2X.SFSEvent.USER_ENTER_ROOM, onUserEnterRoom, this);
+        this.sfs.addEventListener(SFS2X.SFSEvent.USER_EXIT_ROOM, onUserExitRoom, this);
+
         function onConnection(evtParams) {
             if (evtParams.success)
                 console.log("Connected to SmartFoxServer 2X!");
@@ -62,6 +67,28 @@ export class SFService {
 
         function onRoomJoinError(evtParams) {
             console.log("Room joining failed: " + evtParams.errorMessage);
+        }
+        function onUserCountChange(evtParams,self=this) {
+            var room = evtParams.room;
+            var uCount = evtParams.uCount;
+            var sCount = evtParams.sCount;
+            if (uCount == 2) {
+                //call ready request
+                              
+            }
+            console.log("Room: " + room.name + " now contains " + uCount + " users and " + sCount + " spectators");
+        }
+        function onUserEnterRoom(evtParams) {
+            var room = evtParams.room;
+            var user = evtParams.user;
+             
+            console.log("User " + user.name + " just joined Room " + room.name);
+        }
+        function onUserExitRoom(evtParams) {
+            var room = evtParams.room;
+            var user = evtParams.user;
+
+            console.log("User " + user.name + " just left Room " + room.name);
         }
 
     }
@@ -112,8 +139,37 @@ export class SFService {
 
 
     }
-    sendReady() {
-
+    onRoomJoined(evtParams) {
+            console.log("Room joined successfully: " + evtParams.room);
+            this.roomId = evtParams.room
+        }
+    sendReady(evtParams:any) {
+        var room = evtParams.room;
+            var uCount = evtParams.uCount;
+            var sCount = evtParams.sCount;
+            if (uCount == 2) {
+                //call ready request
+                let obj = {
+                    REMATCH:null
+                }
+                this.sfs.send(new SFS2X.Requests.System.ExtensionRequest("r",obj,this.roomId));
+                console.log("paHUCH GAYA CHUTYA ")
+                
+            }
+            console.log("Room: " + room.name + " now contains " + uCount + " users and " + sCount + " spectators");
+        
+    }
+    sendReady2() {
+                //call ready request
+                let obj = {
+                    REMATCH:null
+                }
+                this.sfs.send(new SFS2X.Requests.System.ExtensionRequest("r",obj,this.roomId));
+                console.log("paHUCH GAYA CHUTYA ")
+                
+            
+            //console.log("Room: " + room.name + " now contains " + uCount + " users and " + sCount + " spectators");
+        
     }
     loginSFS(username: string, self = this) {
 

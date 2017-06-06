@@ -71,4 +71,7 @@ export class GameComponent implements OnInit {
 sendGameRoomRequest(){
   this.sfx.sendGameRoomRequest();
 }
+sendReady(){
+  this.sfx.sendReady2();
+}
 }
