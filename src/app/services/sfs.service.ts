@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter} from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 
 declare var window: any;
 declare var SFS2X: any;
@@ -6,11 +6,17 @@ declare var SFS2X: any;
 @Injectable()
 export class SFService {
     sfs: any;
-   
+
     initializeEventListeners() { // try to add all event listeners here
         this.sfs.addEventListener(SFS2X.SFSEvent.CONNECTION, onConnection, window);
-        this.sfs.addEventListener(SFS2X.SFSEvent.CONNECTION_LOST, onConnectionLost,window);
-
+        this.sfs.addEventListener(SFS2X.SFSEvent.CONNECTION_LOST, onConnectionLost, window);
+        this.sfs.addEventListener(SFS2X.SFSEvent.LOGIN, onLogin, this);
+        this.sfs.addEventListener(SFS2X.SFSEvent.LOGIN_ERROR, onLoginError, this);
+        this.sfs.addEventListener(SFS2X.SFSEvent.EXTENSION_RESPONSE, onExtensionResponse, this);
+        this.sfs.addEventListener(SFS2X.SFSEvent.ROOM_ADD, onRoomCreated, this);
+        this.sfs.addEventListener(SFS2X.SFSEvent.ROOM_CREATION_ERROR, onRoomCreationError, this);
+        this.sfs.addEventListener(SFS2X.SFSEvent.ROOM_JOIN, onRoomJoined, this);
+        this.sfs.addEventListener(SFS2X.SFSEvent.ROOM_JOIN_ERROR, onRoomJoinError, this);
         function onConnection(evtParams) {
             if (evtParams.success)
                 console.log("Connected to SmartFoxServer 2X!");
@@ -34,6 +40,30 @@ export class SFService {
                 // Manual disconnection is usually ignored
             }
         }
+        function onLoginError(evtParams) {
+            console.log("Login failure: " + evtParams.errorMessage);
+        }
+        function onExtensionResponse(evtParams) {
+            console.log(evtParams);
+        }
+        function onLogin(evtParams) {
+            console.log("Login successful!");
+        }
+        function onRoomCreated(evtParams) {
+            console.log("Room created: " + evtParams.room);
+        }
+
+        function onRoomCreationError(evtParams) {
+            console.log("Room creation failure: " + evtParams.errorMessage);
+        }
+        function onRoomJoined(evtParams) {
+            console.log("Room joined successfully: " + evtParams.room);
+        }
+
+        function onRoomJoinError(evtParams) {
+            console.log("Room joining failed: " + evtParams.errorMessage);
+        }
+
     }
     initiateSFX() {
 
@@ -49,15 +79,44 @@ export class SFService {
         //
         this.initializeEventListeners();
         //console.log(this, window)
-        
+
         this.sfs.connect()
 
     }
     testSFXWorking() {
         console.log(this.sfs.isConnected());
     }
-    loginSFS(username: string, self=this) {
-        
+    sendGameRoomRequest() {
+        var object: any = {}
+        object.rg = "g1";
+        function randomString(length, chars) {
+            var result = '';
+            for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+            return result;
+        }
+        object.rn = randomString(10, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+        this.sfs.addEventListener(SFS2X.SFSEvent.EXTENSION_RESPONSE, onExtensionResponse, window);
+
+        this.sfs.send(new SFS2X.Requests.System.ExtensionRequest("g", object));
+
+        // Send two integers to the Zone extension and get their sum in return
+
+        function onExtensionResponse(evtParams) {
+            if (evtParams.cmd == "g") {
+                var responseParams = evtParams.params;
+
+                // We expect a number called "sum"
+                console.log(responseParams);
+            }
+        }
+
+
+    }
+    sendReady() {
+
+    }
+    loginSFS(username: string, self = this) {
+
 
         // Login
         this.sfs.send(new SFS2X.Requests.System.LoginRequest(username, "", null, "SportsUnity"));
@@ -88,25 +147,7 @@ export class SFService {
             // SFSController.getSFSClient().send(new ExtensionRequest("g", object));
             // }
 
-            function randomString(length, chars) {
-                var result = '';
-                for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
-                return result;
-            }
-            var rString = randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
-            var object: any = {}
-            object.rg = "g1";
-            object.rn = randomString(10, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
-
-            
-            self.sfs.send(new SFS2X.Requests.System.ExtensionRequest("g", object));
         }
 
-        function onLoginError(evtParams) {
-            console.log("Login failure: " + evtParams.errorMessage);
-        }
-        function onExtensionResponse(evtParams) {
-                console.log(evtParams);
-        }
     }
 }

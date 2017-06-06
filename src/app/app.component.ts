@@ -7,4 +7,5 @@ const window :any={}
 })
 export class AppComponent {
   title = 'app works!';
+  
 }

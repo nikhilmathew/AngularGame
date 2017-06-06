@@ -68,5 +68,7 @@ export class GameComponent implements OnInit {
   loginSFS() {
     this.sfx.loginSFS(this.username);
   }
-
+sendGameRoomRequest(){
+  this.sfx.sendGameRoomRequest();
+}
 }
