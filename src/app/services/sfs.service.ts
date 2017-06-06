@@ -162,7 +162,7 @@ export class SFService {
     sendReady2() {
                 //call ready request
                 let obj = {
-                    REMATCH:null
+                    REMATCH:'REMATCH'
                 }
                 this.sfs.send(new SFS2X.Requests.System.ExtensionRequest("r",obj,this.roomId));
                 console.log("paHUCH GAYA CHUTYA ")
