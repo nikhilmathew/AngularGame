@@ -162,10 +162,24 @@ export class SFService {
     sendReady2() {
                 //call ready request
                 let obj = {
-                    REMATCH:'REMATCH'
+                    REMATCH:''
                 }
                 this.sfs.send(new SFS2X.Requests.System.ExtensionRequest("r",obj,this.roomId));
-                console.log("paHUCH GAYA CHUTYA ")
+                console.log("paHUCH GAYA CHUTYA 2")
+                
+            
+            //console.log("Room: " + room.name + " now contains " + uCount + " users and " + sCount + " spectators");
+        
+    }
+    sendQA(questionno) {
+                //call ready request
+                let obj = {
+                    qn:questionno ,
+                    ao:"no_answer",
+                    d:80000
+                }
+                this.sfs.send(new SFS2X.Requests.System.ExtensionRequest("q",obj,this.roomId));
+                console.log("qa request")
                 
             
             //console.log("Room: " + room.name + " now contains " + uCount + " users and " + sCount + " spectators");

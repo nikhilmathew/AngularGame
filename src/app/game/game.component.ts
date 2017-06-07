@@ -19,6 +19,7 @@ export class GameComponent implements OnInit {
   timer;
   datafetched = false;
   commentary: boolean = true;
+  question:number =0;
   constructor(private router: Router,private route: ActivatedRoute, private ds: DataService, private sfx: SFService) { }
 
   ngOnInit() {
@@ -73,5 +74,8 @@ sendGameRoomRequest(){
 }
 sendReady(){
   this.sfx.sendReady2();
+}
+sendQA(){
+  this.sfx.sendQA(this.question++);
 }
 }
