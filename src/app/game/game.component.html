@@ -7,8 +7,12 @@
 <button class="btn btn-primary" (click)="loginSFS()">Login to Smart Fox  as {{ username }}</button>
 <button class="btn btn-danger" (click)="sendGameRoomRequest()">Send Game Room Request</button>
 <button class="btn btn-danger" (click)="sendReady()">Send Ready</button>
-<button class="btn btn-warning" (click)="sendQA()">Send QA</button>
-
+<button class="btn btn-warning" (click)="sendQA('option_a')">Send A</button>
+<button class="btn btn-warning" (click)="sendQA('option_b')">Send b</button>
+<button class="btn btn-warning" (click)="sendQA('option_c')">Send c</button>
+<button class="btn btn-warning" (click)="sendQA('option_d')">Send d</button>
+<button class="btn btn-warning" (click)="sendQA('no_answer')">Send no ans</button>
+<p (catchme) ="catchev()"></p>
 <app-commentary *ngIf="commentary" else quizcomp></app-commentary>
 <ng-template #quizcomp> alternate text for commentary</ng-template>
 

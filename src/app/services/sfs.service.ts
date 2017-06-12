@@ -115,7 +115,7 @@ export class SFService {
     }
     sendGameRoomRequest() {
         var object: any = {}
-        object.rg = "g1";
+        object.rg = "g2";
         function randomString(length, chars) {
             var result = '';
             for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
@@ -171,11 +171,11 @@ export class SFService {
             //console.log("Room: " + room.name + " now contains " + uCount + " users and " + sCount + " spectators");
         
     }
-    sendQA(questionno) {
+    sendQA(questionno,option) {
                 //call ready request
                 let obj = {
                     qn:questionno ,
-                    ao:"no_answer",
+                    ao:option,
                     d:80000
                 }
                 this.sfs.send(new SFS2X.Requests.System.ExtensionRequest("q",obj,this.roomId));

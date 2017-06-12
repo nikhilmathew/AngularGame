@@ -1,7 +1,7 @@
 import { SFService } from './../services/sfs.service';
 import { DataService } from './../services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Observable } from "rxjs/Observable";
 
 @Component({
@@ -12,6 +12,7 @@ import { Observable } from "rxjs/Observable";
 })
 export class GameComponent implements OnInit {
   @Output() quizdata: any
+  @Output('catchme') ev2 = new EventEmitter<string>();
   username: string = "nik";
   maxticks = 30
   ticks = 30
@@ -35,7 +36,7 @@ export class GameComponent implements OnInit {
         }
       }
     );
-    this.fetchQuizDetails()
+    
     setInterval(() => {
       if (this.timer2 != 0) {
         this.timer2 -= 1
@@ -54,7 +55,7 @@ export class GameComponent implements OnInit {
   }
 
   fetchQuizDetails() {
-    this.quizdata = this.ds.getQuizData().subscribe(
+    this.quizdata = this.ds.getQuizData(this.sfx.roomId).subscribe(
       data => {
         this.quizdata = data
         console.log(this.quizdata.questions)
@@ -71,11 +72,19 @@ export class GameComponent implements OnInit {
   }
 sendGameRoomRequest(){
   this.sfx.sendGameRoomRequest();
+  this.loadQuestions();
 }
 sendReady(){
   this.sfx.sendReady2();
+  this.ev2.emit('hello')
 }
-sendQA(){
-  this.sfx.sendQA(this.question++);
+catchev(event){
+  console.log(event)
+}
+sendQA(option){
+  this.sfx.sendQA(this.question++,option);
+}
+loadQuestions(){
+console.log(  this.fetchQuizDetails())
 }
 }
