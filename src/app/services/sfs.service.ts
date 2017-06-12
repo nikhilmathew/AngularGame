@@ -1,5 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { Subject } from "rxjs";
 
 declare var window: any;
 declare var SFS2X: any;
@@ -8,14 +9,14 @@ declare var SFS2X: any;
 export class SFService {
     sfs: any;
     roomId:string;
-     tosend = new BehaviorSubject<any>(0);
+     ExtensionListener = new Subject<any>();
     
     initializeEventListeners() { // try to add all event listeners here
         this.sfs.addEventListener(SFS2X.SFSEvent.CONNECTION, onConnection, window);
         this.sfs.addEventListener(SFS2X.SFSEvent.CONNECTION_LOST, onConnectionLost, window);
         this.sfs.addEventListener(SFS2X.SFSEvent.LOGIN, onLogin, this);
         this.sfs.addEventListener(SFS2X.SFSEvent.LOGIN_ERROR, onLoginError, this);
-        this.sfs.addEventListener(SFS2X.SFSEvent.EXTENSION_RESPONSE, onExtensionResponse, this);
+        this.sfs.addEventListener(SFS2X.SFSEvent.EXTENSION_RESPONSE, this.onExtensionResponse, this);
         this.sfs.addEventListener(SFS2X.SFSEvent.ROOM_ADD, onRoomCreated, this);
         this.sfs.addEventListener(SFS2X.SFSEvent.ROOM_CREATION_ERROR, onRoomCreationError, this);
         this.sfs.addEventListener(SFS2X.SFSEvent.ROOM_JOIN, this.onRoomJoined, this);
@@ -23,7 +24,8 @@ export class SFService {
         this.sfs.addEventListener(SFS2X.SFSEvent.USER_COUNT_CHANGE, this.sendReady, this);
         this.sfs.addEventListener(SFS2X.SFSEvent.USER_ENTER_ROOM, onUserEnterRoom, this);
         this.sfs.addEventListener(SFS2X.SFSEvent.USER_EXIT_ROOM, onUserExitRoom, this);
-
+        // event listeners which do need to call any other method are declared inside this method 
+        // else decalre outside and refer accordingly
         function onConnection(evtParams) {
             if (evtParams.success)
                 console.log("Connected to SmartFoxServer 2X!");
@@ -47,12 +49,10 @@ export class SFService {
                 // Manual disconnection is usually ignored
             }
         }
-        function onLoginError(evtParams) {
+        function onLoginError(evtParams) { 
             console.log("Login failure: " + evtParams.errorMessage);
         }
-        function onExtensionResponse(evtParams) {
-            console.log(evtParams);
-        }
+       
         function onLogin(evtParams) {
             console.log("Login successful!");
             
@@ -96,17 +96,13 @@ export class SFService {
 
     }
     initiateSFX() {
-
-        //
         let config: any = {};
-        config.host = 'stg-sf.sportsunity.co';// "stg-sf.sportsunity.co";
+        config.host = '192.168.0.11';// "stg-sf.sportsunity.co";
         config.port = 8888;
         config.useSSL = false;
         config.zone = "SportsUnity"//"BasicExamples";
         config.debug = false;
-        //
         this.sfs = new SFS2X.SmartFox(config);
-        //
         this.initializeEventListeners();
         //console.log(this, window)
 
@@ -125,27 +121,26 @@ export class SFService {
             return result;
         }
         object.rn = randomString(10, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
-        this.sfs.addEventListener(SFS2X.SFSEvent.EXTENSION_RESPONSE, onExtensionResponse, window);
 
         this.sfs.send(new SFS2X.Requests.System.ExtensionRequest("g", object));
 
         // Send two integers to the Zone extension and get their sum in return
-
-        function onExtensionResponse(evtParams) {
-            if (evtParams.cmd == "g") {
-                var responseParams = evtParams.params;
-
+    }
+        onExtensionResponse(evtParams) {
+           
+                
                 // We expect a number called "sum"
-                console.log(responseParams);
-            }
+                console.log("extension response",evtParams);
+                this.ExtensionListener.next(evtParams);
         }
 
 
-    }
+    
     onRoomJoined(evtParams) {
             console.log("Room joined successfully: " + evtParams.room);
             this.roomId = evtParams.room
-            this.tosend.next(evtParams);
+            
+            
         }
     sendReady(evtParams:any) {
         var room = evtParams.room;

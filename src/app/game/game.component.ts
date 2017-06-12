@@ -48,8 +48,8 @@ export class GameComponent implements OnInit {
       this.commentary = false
     }, 2000)
     //console.log(this.quizdata.quiz,this.quizdata.options)
-this.subs = this.sfx.tosend.subscribe((data)=>{
-console.log("goli pakad li hai bahadur",data)
+this.subs = this.sfx.ExtensionListener.subscribe((data)=>{
+console.log("goli pakad li hai bahadur",data.cmd)
 })  
 }
   stopTimer(){
@@ -76,8 +76,8 @@ console.log("goli pakad li hai bahadur",data)
     this.sfx.loginSFS(this.username);
   }
 sendGameRoomRequest(){
-  this.sfx.sendGameRoomRequest();
-  this.loadQuestions();
+  this.sfx.sendGameRoomRequest()
+  this.loadQuestions()
 }
 sendReady(){
   this.sfx.sendReady2();
@@ -90,6 +90,6 @@ sendQA(option){
   this.sfx.sendQA(this.question++,option);
 }
 loadQuestions(){
-console.log(  this.fetchQuizDetails())
+console.log(this.fetchQuizDetails())
 }
 }
