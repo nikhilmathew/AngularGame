@@ -97,7 +97,7 @@ export class SFService {
     }
     initiateSFX() {
         let config: any = {};
-        config.host = '192.168.0.11';// "stg-sf.sportsunity.co";
+        config.host = 'localhost';//'192.168.0.11';// "stg-sf.sportsunity.co";
         config.port = 8888;
         config.useSSL = false;
         config.zone = "SportsUnity"//"BasicExamples";
@@ -151,7 +151,7 @@ export class SFService {
                 let obj = {
                     REMATCH:null
                 }
-                this.sfs.send(new SFS2X.Requests.System.ExtensionRequest("r",obj,this.roomId));
+               // this.sfs.send(new SFS2X.Requests.System.ExtensionRequest("r",obj,this.roomId));
                 console.log("paHUCH GAYA CHUTYA ")
                 
             }
