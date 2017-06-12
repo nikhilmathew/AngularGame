@@ -1,4 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 declare var window: any;
 declare var SFS2X: any;
@@ -7,6 +8,7 @@ declare var SFS2X: any;
 export class SFService {
     sfs: any;
     roomId:string;
+     tosend = new BehaviorSubject<any>(0);
     
     initializeEventListeners() { // try to add all event listeners here
         this.sfs.addEventListener(SFS2X.SFSEvent.CONNECTION, onConnection, window);
@@ -53,6 +55,7 @@ export class SFService {
         }
         function onLogin(evtParams) {
             console.log("Login successful!");
+            
         }
         function onRoomCreated(evtParams) {
             console.log("Room created: " + evtParams.room);
@@ -96,7 +99,7 @@ export class SFService {
 
         //
         let config: any = {};
-        config.host = '192.168.0.11';// "stg-sf.sportsunity.co";
+        config.host = 'stg-sf.sportsunity.co';// "stg-sf.sportsunity.co";
         config.port = 8888;
         config.useSSL = false;
         config.zone = "SportsUnity"//"BasicExamples";
@@ -142,6 +145,7 @@ export class SFService {
     onRoomJoined(evtParams) {
             console.log("Room joined successfully: " + evtParams.room);
             this.roomId = evtParams.room
+            this.tosend.next(evtParams);
         }
     sendReady(evtParams:any) {
         var room = evtParams.room;

@@ -3,6 +3,7 @@ import { DataService } from './../services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Observable } from "rxjs/Observable";
+import { Subscription } from "rxjs/Subscription";
 
 @Component({
   selector: 'app-game',
@@ -21,6 +22,7 @@ export class GameComponent implements OnInit {
   datafetched = false;
   commentary: boolean = true;
   question:number =0;
+  subs :Subscription;
   constructor(private router: Router,private route: ActivatedRoute, private ds: DataService, private sfx: SFService) { }
 
   ngOnInit() {
@@ -46,7 +48,10 @@ export class GameComponent implements OnInit {
       this.commentary = false
     }, 2000)
     //console.log(this.quizdata.quiz,this.quizdata.options)
-  }
+this.subs = this.sfx.tosend.subscribe((data)=>{
+console.log("goli pakad li hai bahadur",data)
+})  
+}
   stopTimer(){
     this.timer.unsubscribe()
   }
